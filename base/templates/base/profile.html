@@ -1,0 +1,31 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+    <h1>User Detail</h1>
+    <p>Username: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Joined: {{ user.date_joined }}</p>
+
+    <div>
+        {% for room in rooms %}
+      
+          <div style="border: 2px solid black">
+            
+            {% if request.user == room.host %}
+            <a href="{% url 'update-room' room.id %}">UPDATE</a>
+            <a href="{% url 'delete-room' room.id %}">DELETE</a>
+            {% endif %}
+            <h2>{{ room.title }} by @{{room.host}}</h2>
+            <h3>{{ room.topic }}</h3>
+      
+            <p>{{ room.description }}</p>
+            <small>{{ room.created }}</small>
+            <a href="{% url 'room' room.id %}">Go to room</a>
+      
+          </div>
+      
+        {% endfor %} 
+    </div>
+
+{% endblock content %}

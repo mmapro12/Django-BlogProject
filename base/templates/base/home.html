@@ -1,0 +1,59 @@
+{% extends "main.html" %} {% block content %}
+<style>
+  .home-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+  }
+</style>
+
+{% if request.user.is_authenticated %}
+<div>
+    <h2>Hello, {{ request.user.username }}!</h2>
+    <a href="{% url 'profile' request.user.id %}">Profile</a>
+</div>
+{% endif %}
+
+<form action="">
+  <input type="text" name="q" placeholder="Search...">
+  <button type="submit">Submit</button>
+</form>
+
+<h1>Home</h1>
+
+<div class="home-container">
+  <div>
+    <h3>Browse Topics</h3>
+    <hr>
+    <div> <a href="{% url 'home'%}">All</a> </div>
+    {% for topic in topics %}
+        <div> <a href="{% url 'home'%}?q={{topic.name}}">{{ topic.name }}</a> </div>
+    {% endfor %}
+
+  </div>
+
+  <div>
+    <a href="{% url 'create-room' %}">Create Your Own Room<a/>
+
+      <div>
+      {% for room in rooms %}
+    
+        <div style="border: 2px solid black">
+          {% if request.user == room.host %}
+          <a href="{% url 'update-room' room.id %}">UPDATE</a>
+          <a href="{% url 'delete-room' room.id %}">DELETE</a>
+          {% endif %}
+          <h2>{{ room.title }} by @{{room.host}}</h2>
+          <h3>{{ room.topic }}</h3>
+    
+          <p>{{ room.description }}</p>
+          <small>{{ room.created }}</small>
+          <a href="{% url 'room' room.id %}">Go to room</a>
+    
+        </div>
+    
+      {% endfor %} 
+      </div>
+  </div>
+</div>
+
+{% endblock content %}
